@@ -69,7 +69,7 @@ Historie użytkownika
 		- Wspólne miejsca przy remisie w rankingu np. 1 - 2 - 3 - 3 - 5 - 6 - 7 - 7 - 7 - 10
 		- przykład punktacji - 1. A, 2. B. 3. C , wynik 1. B, 2. A., 3. D - wynik daje 22 punkty
 		- przykład remisu - 1. 78 pkt, 2. 43 pkt, 2. 43 pkt, 4. 15 pkt - 1. 1 idealne, 3 trafienia, 2. 2 trafienia, 2. 2 trafienia, 4. 1 trafienie
-		- przykład remisu - 1. 33 pkt 1. 33 pkt, 4 15 pkt - 1. dwa trafienia (18+15), 1. jedno trafienie (25+8), 4. jedno trafienie (15)
+		- przykład remisu - 1. 33 pkt 2. 33 pkt, 3 15 pkt - 1. dwa trafienia (18+15), 2. jedno trafienie (25+8), 3. jedno trafienie (15)
 		- przeliczanie wyników co godzinę przez 7 dni		
 		
 7b Jako kibc chcę, abym widział ranking typujących z całego sezonu
