@@ -40,7 +40,7 @@ All scenarios use data from fixtures and a time set with the injectable clock.
 3. A player edits a saved prediction and sees the prediction with the changed data.
 4. A player deletes their prediction and sees empty fields.
 5. A player predicts results when the deadline passes and sees the message "Predictions are closed".
-6. After a race, a player opens the ranking and sees a table with position, nickname and points.
+6. After a race, a player opens the race ranking and sees their own row with position and points (details below).
 
 Page Object Model pages:
 
@@ -49,7 +49,31 @@ Page Object Model pages:
 - methods: `createAccount(nickname, pin)` (after 201 stays on `LoginPage`), `logIn(nickname, pin)`
 - reads: `errorMessage` (also the account lockout message), `repeatPinMessage`
 
-Remaining pages to be described: `ChampionPredictionPage`, `GrandPrixPredictionPage`, `SeasonRankingPage`.
+**GrandPrixPredictionPage**
+- actions: `selectDriver(position, driver)`, `selectConstructor(position, constructor)`, `clickSave` (stays on `GrandPrixPredictionPage`), `clickEdit` (stays on `GrandPrixPredictionPage`), `clickDelete` (goes to `ConfirmDeleteDialog`)
+- methods: `submitPrediction(firstDriverAndConstructor, secondDriverAndConstructor, thirdDriverAndConstructor)`, `editPrediction(firstDriverAndConstructor, secondDriverAndConstructor, thirdDriverAndConstructor)`, `deletePrediction` = `clickDelete` + `confirmDelete` (ends on `GrandPrixPredictionPage`)
+- reads: `errorMessage`, `driversOnPositions`, `areAllFieldsEmpty`, `predictionDeadline`, `countdown`
+
+**ConfirmDeleteDialog**
+- actions: `confirmDelete` (goes to `GrandPrixPredictionPage`), `cancelDelete` (goes to `GrandPrixPredictionPage`)
+
+**SeasonRankingPage**
+- actions: `selectRace(race)` (goes to `RaceRankingPage`)
+- reads: `rankingTable` (position, nickname, points), `rowFor(nickname)` (position, points), `racesList` (race names to choose from), `statusMessage`
+
+**RaceRankingPage**
+- actions: `goBackToSeasonRanking` (goes to `SeasonRankingPage`)
+- reads: `rankingTable` (position, nickname, points), `rowFor(nickname)` (position, points), `statusMessage`
+
+There is no `ChampionPredictionPage`: champion predictions are covered by unit tests (points, bonuses) and API tests (statuses, messages, time window), and the E2E suite does not repeat them (see the test pyramid rule).
+
+**Scenario 6: race ranking after the race**
+
+Data: `results-race-base.json`, final podium A, B, C. Two players: `anna` predicted A, B, C; `bob` predicted A, C, B.
+1. Log in as `anna` (`LoginPage.logIn`); the test lands on `SeasonRankingPage`.
+2. `SeasonRankingPage.selectRace("<race name>")` goes to `RaceRankingPage`.
+3. `RaceRankingPage.rowFor("anna")`: expected position 1, 78 points (25 + 18 + 15 + 20 for the perfect podium).
+4. `RaceRankingPage.rowFor("bob")`: expected position 2, 42 points (25 for A + 9 for B, who finished 2nd + 8 for C, who finished 3rd).
 
 ## 5. Test data and clock
 
@@ -74,4 +98,13 @@ Clock: a `clock.now()` dependency plus a test endpoint `POST /test/clock`, avail
 
 ## 6. Environment and CI
 
-To be completed.
+CI runs on every pull request to `main` and on every push to `main`; it uses fixtures only (`F1_DATA=fixtures`), so it does not depend on Jolpica.
+
+The pipeline is one job with consecutive steps, so the environment is set up only once (checkout and installing dependencies):
+
+1. type check (and lint, if added)
+2. unit tests (Vitest)
+3. API tests (Playwright)
+4. E2E tests (Playwright with a browser)
+
+Steps run from the cheapest and fastest to the slowest, so a failure stops the pipeline early.
