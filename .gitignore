@@ -1,9 +1,26 @@
+# Dependencies
 node_modules/
+ 
+# Build output
 dist/
-coverage/
+ 
+# Databases (development and test)
+*.db
+*.sqlite
+ 
+# Environment files
+.env
+.env.*
+ 
+# Test reports
 playwright-report/
 test-results/
-*.sqlite
-*.db
-.env
+coverage/
+ 
+# OS and editor files
 .DS_Store
+.idea/
+.vscode/
+ 
+# Logs
+*.log
