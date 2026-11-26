@@ -1,4 +1,4 @@
-const EXACT_POINTS = [25, 18, 15];
+const POINTS = [25, 18, 15];
 
 export function calculatePodiumPoints(
   predicted: string[],
@@ -6,11 +6,16 @@ export function calculatePodiumPoints(
 ): number {
   let points = 0;
 
-  for (let i = 0; i < EXACT_POINTS.length; i++) {
+  for (let i = 0; i < POINTS.length; i++) {
     if (predicted[i] === actual[i]) {
-      points += EXACT_POINTS[i];
+      points += POINTS[i];
+    } else {
+      const finishedAt = actual.indexOf(predicted[i]);
+      if (finishedAt !== -1) {
+        points += Math.ceil(POINTS[finishedAt] / 2);
+      }
     }
   }
 
   return points;
-}
+} 
