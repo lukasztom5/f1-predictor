@@ -22,6 +22,9 @@ describe("calculatePodiumPoints", () => {
 		expect(calculatePodiumPoints(["C", "X", "Y"], ["A", "B", "C"])).toBe(8)
 	});
 	
+	it("Returns 9 points, when driver predicted as a winner actually was second the race", () => {
+		expect(calculatePodiumPoints(["B", "X", "Y"], ["A", "B", "C"])).toBe(9)
+	});
 });
 
 
