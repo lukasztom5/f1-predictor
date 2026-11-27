@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { calculatePodiumPoints } from "./scoring.js";
+import { calculatePodiumPoints, calculateChampionBonus } from "./scoring.js";
 
 describe("calculatePodiumPoints", () => {
 
@@ -37,6 +37,23 @@ describe("calculatePodiumPoints", () => {
 	
 });
 
+describe("calculateChampionBonus", () => {
+	it("Returns 50 points, when the only champion driver is predicted correctly", () => {
+		expect(calculateChampionBonus({driver: "A", team: "X"}, {driver: "A", team: "B"})).toBe(50);
+	});
+	
+	it("Returns 50 points, when the only champion team is predicted correctly", () => {
+		expect(calculateChampionBonus({driver: "A", team: "B"}, {driver: "X", team: "B"})).toBe(50);
+	});	
+	
+	it("Returns 100 points, when the champion driver and team are predicted correctly", () => {
+		expect(calculateChampionBonus({driver: "A", team: "B"}, {driver: "A", team: "B"})).toBe(100);
+	});	
+
+	it("Returns 0 points, when neither champion driver nor team is predicted correctly", () => {
+		expect(calculateChampionBonus({driver: "A", team: "B"}, {driver: "X", team: "Y"})).toBe(0);
+	});		
+});
 
 
 

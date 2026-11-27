@@ -26,3 +26,23 @@ export function calculatePodiumPoints(
 
   return points;
 }
+
+export type ChampionPrediction = { driver: string; team: string };
+
+const CHAMPION_BONUS_POINTS = 50;
+
+export function calculateChampionBonus(
+  predicted: ChampionPrediction,
+  actual: ChampionPrediction,
+): number {
+  let points = 0;
+
+  if (predicted.driver === actual.driver) {
+    points += CHAMPION_BONUS_POINTS;
+  }
+  if (predicted.team === actual.team) {
+    points += CHAMPION_BONUS_POINTS;
+  }
+
+  return points;
+}
